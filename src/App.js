@@ -12,6 +12,7 @@ import './App.css';
 
 function App() {
   const location = useLocation();  // Get current route location
+  const isLoginPage = location.pathname === "/" && '/login';
 
   return (
     <div className="App">
@@ -20,7 +21,7 @@ function App() {
         {location.pathname !== '/login' && location.pathname !== '/' && <Sidebar />}
 
         
-        <div className="content">
+        <div className={isLoginPage ? "" : "content"}>
           <Routes>
             <Route path="/" element={<LoginPage />} />
             <Route path="/about" element={<AboutPage />} />

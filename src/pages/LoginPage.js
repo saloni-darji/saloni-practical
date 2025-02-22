@@ -1,5 +1,3 @@
-// src/pages/LoginPage.js
-
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import './LoginPage.css';
@@ -23,11 +21,13 @@ function LoginPage() {
           password: "83r5^_",
         }),
       });
+
       const data = await response.json();
-      if (data.token) {
+
+      if (data.token !== 'null') { 
         setToken(data.token);
-        console.log("token is generated", token);
-         alert('Login Successful!');
+        console.log("Token is generated:", data.token);
+        alert('Login Successful!');
         navigate('/home');
         setError(null);
       } else {
@@ -62,8 +62,6 @@ function LoginPage() {
         >
           Login
         </button>
-        {/* {token && <p className="mt-2 text-green-600">Token: {token}</p>} */}
-        
         {error && <p className="mt-2 text-red-600">{error}</p>}
       </div>
     </div>
