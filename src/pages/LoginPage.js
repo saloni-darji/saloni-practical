@@ -1,40 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import './LoginPage.css';
 
 function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [token, setToken] = useState(null);
   const [error, setError] = useState(null);
+  const [token, setToken] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    // Prevent user from going back after logout
+    if (!localStorage.getItem("authToken")) {
+      window.history.pushState(null, "", window.location.href);
+      window.addEventListener("popstate", () => {
+        navigate("/login");
+      });
+    }
+  }, [navigate]);
+
   const handleLogin = async () => {
+    if (!username || !password) {
+      setError("Username and password are required");
+      return;
+    }
+
     try {
       const response = await fetch("https://fakestoreapi.com/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          username: "mor_2314",
-          password: "83r5^_",
-        }),
+        body: JSON.stringify({ username, password }),
       });
+
+      if (!response.ok) {
+        throw new Error("Invalid credentials");
+      }
 
       const data = await response.json();
 
-      if (data.token !== 'null') { 
-        setToken(data.token);
-        console.log("Token is generated:", data.token);
+      if (data.token) {
+        localStorage.setItem("authToken", data.token);
         alert('Login Successful!');
+        console.log("token is generated", data.token);
         navigate('/home');
         setError(null);
       } else {
         setError("Invalid credentials");
       }
     } catch (err) {
-      setError("An error occurred");
+      setError(err.message || "An error occurred");
     }
   };
 
@@ -63,6 +79,7 @@ function LoginPage() {
           Login
         </button>
         {error && <p className="mt-2 text-red-600">{error}</p>}
+        {token && <p className="mt-2 text-green-600">Token: {token}</p>}
       </div>
     </div>
   );

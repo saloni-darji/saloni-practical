@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from "../services/AuthContext";   
 import { FiArrowLeft, FiArrowRight, FiBell, FiSettings, FiMail, FiHome, FiInfo, FiTool, FiPhone, FiLogOut } from 'react-icons/fi';
 
 function Sidebar() {
   const navigate = useNavigate();
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const { handleLogout } = useAuth();
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('user');
-    sessionStorage.removeItem('token');
-    navigate('/');
-  };
 
   return (
     <div className={`h-screen bg-gray-800 text-white flex flex-col sidebar fixed ${isSidebarOpen ? 'w-64 open' : 'w-20 closed'} transition-all duration-300 shadow-lg`}>
