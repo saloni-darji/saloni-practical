@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
   text-align: center;
 }
@@ -27,6 +31,23 @@
 .App-link {
   color: #61dafb;
 }
+
+.sidebar.open ~ .content {
+  margin-left: 260px;  /* When sidebar is collapsed, shift content */
+}
+
+.sidebar.closed ~ .content {
+  margin-left: 80px;  /* When sidebar is collapsed, shift content */
+}
+
+body.sidebar-open .content {
+  margin-left: 260px;  /* When sidebar is expanded, shift content */
+}
+
+body.sidebar-closed .content {
+  margin-left: 80px;  /* When sidebar is collapsed, shift content */
+}
+
 
 @keyframes App-logo-spin {
   from {
